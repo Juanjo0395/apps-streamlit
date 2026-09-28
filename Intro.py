@@ -1,87 +1,726 @@
 import streamlit as st
 from PIL import Image
-st.title("Aplicaciones de Inteligencia Artificial.")
+import json
+import os
+import uuid
+import base64
+
+
+# ============================================================
+# CONFIGURACIÓN
+# ============================================================
+
+st.set_page_config(
+    page_title="Aplicaciones de Inteligencia Artificial",
+    page_icon="🤖",
+    layout="wide"
+)
+
+
+# ============================================================
+# CARPETAS Y ARCHIVOS
+# ============================================================
+
+CARPETA_DATOS = "datos_apps"
+CARPETA_IMAGENES = os.path.join(CARPETA_DATOS, "imagenes")
+ARCHIVO_APPS = os.path.join(CARPETA_DATOS, "apps.json")
+
+os.makedirs(CARPETA_IMAGENES, exist_ok=True)
+
+
+# ============================================================
+# ESTILOS
+# ============================================================
+
+st.markdown("""
+<style>
+
+    /* -------------------------------------------------------
+       FONDO GENERAL
+    ------------------------------------------------------- */
+
+    .stApp {
+        background-color: #f7f8fa;
+    }
+
+
+    /* -------------------------------------------------------
+       TÍTULO PRINCIPAL
+    ------------------------------------------------------- */
+
+    .titulo-principal {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+
+    .subtitulo-principal {
+        text-align: center;
+        font-size: 18px;
+        color: #6b7280;
+        margin-bottom: 35px;
+    }
+
+
+    /* -------------------------------------------------------
+       TARJETAS
+    ------------------------------------------------------- */
+
+    .app-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 25px;
+
+        box-shadow:
+            0px 4px 15px rgba(0,0,0,0.08);
+
+        border: 1px solid #eeeeee;
+
+        min-height: 450px;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .app-card:hover {
+        box-shadow:
+            0px 8px 25px rgba(0,0,0,0.13);
+
+        transform: translateY(-2px);
+    }
+
+
+    /* -------------------------------------------------------
+       TÍTULO DE CADA APP
+    ------------------------------------------------------- */
+
+    .app-title {
+        font-size: 21px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-top: 12px;
+        margin-bottom: 8px;
+    }
+
+
+    /* -------------------------------------------------------
+       DESCRIPCIÓN
+    ------------------------------------------------------- */
+
+    .app-description {
+        font-size: 15px;
+        color: #4b5563;
+        line-height: 1.55;
+
+        min-height: 72px;
+
+        margin-bottom: 12px;
+    }
+
+
+    /* -------------------------------------------------------
+       BOTÓN DE LA APP
+    ------------------------------------------------------- */
+
+    .app-button {
+        display: inline-block;
+
+        background-color: #ff4b4b;
+
+        color: white !important;
+
+        padding: 9px 18px;
+
+        border-radius: 8px;
+
+        text-decoration: none !important;
+
+        font-weight: 600;
+
+        margin-top: 5px;
+    }
+
+
+    .app-button:hover {
+        background-color: #e63939;
+        color: white !important;
+    }
+
+
+    /* -------------------------------------------------------
+       CAJA DE ADMINISTRACIÓN
+    ------------------------------------------------------- */
+
+    .admin-box {
+        background-color: white;
+
+        border-radius: 15px;
+
+        padding: 20px;
+
+        border: 1px solid #e5e7eb;
+
+        margin-bottom: 25px;
+    }
+
+
+    /* -------------------------------------------------------
+       INFORMACIÓN
+    ------------------------------------------------------- */
+
+    .info-box {
+        background-color: #eef6ff;
+
+        border-left: 5px solid #3b82f6;
+
+        padding: 15px;
+
+        border-radius: 8px;
+
+        margin-bottom: 20px;
+    }
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# ============================================================
+# FUNCIONES
+# ============================================================
+
+def cargar_apps():
+
+    if not os.path.exists(ARCHIVO_APPS):
+        return []
+
+    try:
+
+        with open(
+            ARCHIVO_APPS,
+            "r",
+            encoding="utf-8"
+        ) as archivo:
+
+            return json.load(archivo)
+
+    except Exception:
+        return []
+
+
+def guardar_apps(apps):
+
+    os.makedirs(CARPETA_DATOS, exist_ok=True)
+
+    with open(
+        ARCHIVO_APPS,
+        "w",
+        encoding="utf-8"
+    ) as archivo:
+
+        json.dump(
+            apps,
+            archivo,
+            ensure_ascii=False,
+            indent=4
+        )
+
+
+def guardar_imagen(archivo):
+
+    extension = os.path.splitext(
+        archivo.name
+    )[1].lower()
+
+    nombre = f"{uuid.uuid4().hex}{extension}"
+
+    ruta = os.path.join(
+        CARPETA_IMAGENES,
+        nombre
+    )
+
+    with open(ruta, "wb") as f:
+        f.write(archivo.getbuffer())
+
+    return ruta
+
+
+def eliminar_imagen(ruta):
+
+    if os.path.exists(ruta):
+
+        try:
+            os.remove(ruta)
+        except:
+            pass
+
+
+# ============================================================
+# CARGAR APLICACIONES
+# ============================================================
+
+apps = cargar_apps()
+
+
+# ============================================================
+# SIDEBAR
+# ============================================================
 
 with st.sidebar:
-  st.subheader("Aplicaciones con Inteligencia Artificial.")
-  parrafo = (
-    "La inteligencia artificial permite mejorar la toma de decisiones con el uso de datos, "
-    "automatizar tareas rutinarias y proporcionar análisis avanzados en tiempo real, lo que "
-    "resulta en una mayor eficiencia y precisión en diversos campos."
-  )
-  st.write(parrafo)
 
-url_ia="https://sites.google.com/view/aplicacionesdeia/inicio"
-st.subheader("En el siguiente enlace puedes encontrar páginas y ejercicios prácticos")
-st.write(f"Enlace para páginas y ejercicios: [Enlace]({url_ia})")
-col1, col2, col3 = st.columns(3)
+    st.header("🤖 Catálogo de IA")
 
-with col1:
- 
- st.subheader("Conversión de texto a voz")
- image = Image.open('txt_to_audio2.png')
- st.image(image, width=190)
- st.write("En la siguiente enlace usaremos una de las aplicaciones de Inteligencia Artificial") 
- url = "https://imultimod.streamlit.app/"
- st.write(f"Texto a voz: [Enlace]({url})")
+    st.write(
+        """
+        Desde este espacio puedes administrar
+        tus aplicaciones de Inteligencia Artificial.
+        """
+    )
 
- st.subheader("Reconocimiento de Objetos")
- image = Image.open('txt_to_audio.png')
- st.image(image, width=200)
- st.write("En la siguiente enlace veremos como se detectan objetos en Imágenes.") 
- url = "https://yolov5cmc.streamlit.app/"
- st.write(f"YOLO: [Enlace]({url})")
+    st.divider()
 
- st.subheader("Entrenando Modelos")
- image = Image.open('OIG5.jpg')
- st.image(image, width=200)
- st.write("En la siguiente enlace veremos como puedes usar tu modelo entrenado.") 
- url = "https://xn3pg24ztuv6fdiqon8qn3.streamlit.app/"
- st.write(f"YOLO: [Enlace]({url})")
+    st.subheader("📊 Información")
 
-with col2: 
- st.subheader("Conversión de voz a texto")
- image = Image.open('OIG8.jpg')
- st.image(image, width=200)
- st.write("En la siguiente veremos una aplicación que usa la conversión de voz a texto.") 
- url = "https://traductorw.streamlit.app/"
- st.write(f"Voz a texto: [Enlace]({url})")
+    st.write(
+        f"Aplicaciones registradas: **{len(apps)}**"
+    )
 
- st.subheader("Análisis de Datos")
- image = Image.open('data_analisis.png')
- st.image(image, width=190)
- st.write("En la siguiente enlace veremos como se pueden analizar datos usando agentes.") 
- url = "https://dataagente.streamlit.app/"
- st.write(f"Datos: [Enlace]({url})")
+    st.divider()
 
- st.subheader("Trasnscriptor Audio y Video")
- image = Image.open('OIG3.jpg')
- st.image(image, width=200)
- st.write("En la siguiente enlace veremos como realizamos transcripciones de audio/video.") 
- url = "https://transcript-whisper.streamlit.app/"
- st.write(f"Transcriptor: [Enlace]({url})")
+    st.subheader("📚 Recursos")
+
+    url_recursos = (
+        "https://sites.google.com/view/"
+        "aplicacionesdeia/inicio"
+    )
+
+    st.markdown(
+        f"[🔗 Páginas y ejercicios]({url_recursos})"
+    )
 
 
-with col3: 
- st.subheader("Generación en Contexto")
- image = Image.open('Chat_pdf.png')
- st.image(image, width=190)
- st.write("En la siguiente veremos una aplicación que usa RAG a partir de un documento (PDF).") 
- url = "https://chatpdf-cc.streamlit.app/"
- st.write(f"RAG: [Enlace]({url})")
+# ============================================================
+# TÍTULO
+# ============================================================
 
- st.subheader("Análisis de Imagen")
- image = Image.open('OIG4.jpg')
- st.image(image, width=200)
- st.write("En la siguiente enlace veremos la capacidad de análisis en Imágenes.") 
- url = "https://vision2-gpt4o.streamlit.app/"
- st.write(f"Vision: [Enlace]({url})")
- 
- st.subheader("Sistema Ciberfísico")
- image = Image.open('OIG6.jpg')
- st.image(image, width=200)
- st.write("En la siguiente enlace veremos la capacidad de interacción con el mundo físico.") 
- url = "https://vision2-gpt4o.streamlit.app/"
- st.write(f"Vision: [Enlace]({url})")
+st.markdown(
+    """
+    <div class="titulo-principal">
+        Aplicaciones de Inteligencia Artificial 🤖
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <div class="subtitulo-principal">
+        Explora mis aplicaciones y proyectos desarrollados
+        con Inteligencia Artificial.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
+# ============================================================
+# ADMINISTRACIÓN
+# ============================================================
+
+with st.expander(
+    "⚙️ Administrar aplicaciones",
+    expanded=False
+):
+
+    st.markdown(
+        """
+        <div class="info-box">
+
+        <b>Agregar una nueva aplicación</b>
+
+        <br><br>
+
+        Completa los campos siguientes y la aplicación
+        aparecerá automáticamente en el catálogo.
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # --------------------------------------------------------
+    # FORMULARIO
+    # --------------------------------------------------------
+
+    with st.form(
+        "formulario_nueva_app",
+        clear_on_submit=True
+    ):
+
+        st.subheader("➕ Nueva aplicación")
+
+        titulo = st.text_input(
+            "Título de la aplicación",
+            placeholder="Ejemplo: Análisis de imágenes"
+        )
+
+        descripcion = st.text_area(
+            "Descripción",
+            placeholder=(
+                "Escribe una breve descripción "
+                "de lo que hace tu aplicación..."
+            ),
+            height=100
+        )
+
+        url = st.text_input(
+            "Enlace de la aplicación",
+            placeholder=(
+                "https://mi-aplicacion.streamlit.app/"
+            )
+        )
+
+        imagen = st.file_uploader(
+            "Imagen de la aplicación",
+            type=[
+                "png",
+                "jpg",
+                "jpeg",
+                "webp"
+            ],
+            help=(
+                "Sube una imagen que represente "
+                "tu aplicación."
+            )
+        )
+
+        st.write("")
+
+        agregar = st.form_submit_button(
+            "🚀 Agregar aplicación",
+            use_container_width=True
+        )
+
+
+    # --------------------------------------------------------
+    # PROCESAR FORMULARIO
+    # --------------------------------------------------------
+
+    if agregar:
+
+        errores = []
+
+        if not titulo.strip():
+            errores.append(
+                "Debes escribir un título."
+            )
+
+        if not descripcion.strip():
+            errores.append(
+                "Debes escribir una descripción."
+            )
+
+        if not url.strip():
+            errores.append(
+                "Debes escribir el enlace."
+            )
+
+        if not imagen:
+            errores.append(
+                "Debes subir una imagen."
+            )
+
+
+        # ----------------------------------------------------
+        # VALIDAR URL
+        # ----------------------------------------------------
+
+        if url.strip():
+
+            if not (
+                url.startswith("http://")
+                or
+                url.startswith("https://")
+            ):
+
+                errores.append(
+                    "El enlace debe comenzar con "
+                    "http:// o https://"
+                )
+
+
+        # ----------------------------------------------------
+        # MOSTRAR ERRORES
+        # ----------------------------------------------------
+
+        if errores:
+
+            for error in errores:
+                st.error(error)
+
+
+        # ----------------------------------------------------
+        # GUARDAR
+        # ----------------------------------------------------
+
+        else:
+
+            try:
+
+                ruta_imagen = guardar_imagen(imagen)
+
+                nueva_app = {
+
+                    "id": uuid.uuid4().hex,
+
+                    "titulo": titulo.strip(),
+
+                    "descripcion":
+                        descripcion.strip(),
+
+                    "url":
+                        url.strip(),
+
+                    "imagen":
+                        ruta_imagen
+
+                }
+
+                apps.append(nueva_app)
+
+                guardar_apps(apps)
+
+                st.success(
+                    "✅ Aplicación agregada correctamente."
+                )
+
+                st.rerun()
+
+            except Exception as e:
+
+                st.error(
+                    f"No fue posible guardar la aplicación: {e}"
+                )
+
+
+# ============================================================
+# ADMINISTRAR APLICACIONES EXISTENTES
+# ============================================================
+
+if len(apps) > 0:
+
+    with st.expander(
+        "🗑️ Eliminar aplicaciones",
+        expanded=False
+    ):
+
+        st.warning(
+            "Atención: al eliminar una aplicación "
+            "también se eliminará su imagen."
+        )
+
+        for app in apps:
+
+            col1, col2 = st.columns(
+                [5, 1]
+            )
+
+            with col1:
+
+                st.write(
+                    f"**{app['titulo']}**"
+                )
+
+            with col2:
+
+                eliminar = st.button(
+                    "🗑️",
+                    key=f"eliminar_{app['id']}"
+                )
+
+                if eliminar:
+
+                    eliminar_imagen(
+                        app["imagen"]
+                    )
+
+                    apps = [
+                        a for a in apps
+                        if a["id"] != app["id"]
+                    ]
+
+                    guardar_apps(apps)
+
+                    st.success(
+                        "Aplicación eliminada."
+                    )
+
+                    st.rerun()
+
+
+# ============================================================
+# CATÁLOGO
+# ============================================================
+
+if len(apps) == 0:
+
+    st.info(
+        """
+        📭 Todavía no tienes aplicaciones.
+
+        Abre **⚙️ Administrar aplicaciones** para
+        agregar tu primera aplicación.
+        """
+    )
+
+
+else:
+
+    # --------------------------------------------------------
+    # CREAR FILAS DE 3 APLICACIONES
+    # --------------------------------------------------------
+
+    for i in range(
+        0,
+        len(apps),
+        3
+    ):
+
+        fila = apps[
+            i:i + 3
+        ]
+
+        columnas = st.columns(
+            3
+        )
+
+
+        for columna, app in zip(
+            columnas,
+            fila
+        ):
+
+            with columna:
+
+                # --------------------------------------------
+                # TARJETA
+                # --------------------------------------------
+
+                st.markdown(
+                    '<div class="app-card">',
+                    unsafe_allow_html=True
+                )
+
+
+                # --------------------------------------------
+                # IMAGEN
+                # --------------------------------------------
+
+                try:
+
+                    if os.path.exists(
+                        app["imagen"]
+                    ):
+
+                        imagen = Image.open(
+                            app["imagen"]
+                        )
+
+                        st.image(
+                            imagen,
+                            use_container_width=True
+                        )
+
+                    else:
+
+                        st.info(
+                            "Imagen no disponible"
+                        )
+
+                except Exception:
+
+                    st.warning(
+                        "No se pudo cargar la imagen."
+                    )
+
+
+                # --------------------------------------------
+                # TÍTULO
+                # --------------------------------------------
+
+                st.markdown(
+                    f"""
+                    <div class="app-title">
+                        {app["titulo"]}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+
+                # --------------------------------------------
+                # DESCRIPCIÓN
+                # --------------------------------------------
+
+                st.markdown(
+                    f"""
+                    <div class="app-description">
+                        {app["descripcion"]}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+
+                # --------------------------------------------
+                # ENLACE
+                # --------------------------------------------
+
+                st.markdown(
+                    f"""
+                    <a
+                        href="{app["url"]}"
+                        target="_blank"
+                        class="app-button"
+                    >
+                        🚀 Abrir aplicación
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+
+                # --------------------------------------------
+                # CERRAR TARJETA
+                # --------------------------------------------
+
+                st.markdown(
+                    "</div>",
+                    unsafe_allow_html=True
+                )
+
+
+# ============================================================
+# PIE DE PÁGINA
+# ============================================================
+
+st.divider()
+
+st.markdown(
+    """
+    <div style="
+        text-align:center;
+        color:#777;
+        padding:15px;
+    ">
+
+        🤖 Catálogo de aplicaciones de Inteligencia Artificial
+
+    </div>
+    """,
+    unsafe_allow_html=True
+)
