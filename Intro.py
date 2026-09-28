@@ -4,12 +4,13 @@ import json
 import os
 import uuid
 import base64
-import html
 import mimetypes
+import html
+import textwrap
 
 
 # ============================================================
-# CONFIGURACIÓN
+# CONFIGURACIÓN DE LA APLICACIÓN
 # ============================================================
 
 st.set_page_config(
@@ -25,17 +26,28 @@ st.set_page_config(
 # ============================================================
 
 CARPETA_DATOS = "datos_apps"
-CARPETA_IMAGENES = os.path.join(CARPETA_DATOS, "imagenes")
-ARCHIVO_APPS = os.path.join(CARPETA_DATOS, "apps.json")
+CARPETA_IMAGENES = os.path.join(
+    CARPETA_DATOS,
+    "imagenes"
+)
 
-os.makedirs(CARPETA_IMAGENES, exist_ok=True)
+ARCHIVO_APPS = os.path.join(
+    CARPETA_DATOS,
+    "apps.json"
+)
+
+os.makedirs(
+    CARPETA_IMAGENES,
+    exist_ok=True
+)
 
 
 # ============================================================
-# PALETA / ESTILOS
+# ESTILOS
 # ============================================================
 
-st.markdown("""
+st.markdown(
+    """
 <style>
 
     /* ======================================================
@@ -65,7 +77,7 @@ st.markdown("""
 
 
     /* ======================================================
-       APP
+       APLICACIÓN
        ====================================================== */
 
     .stApp {
@@ -85,7 +97,7 @@ st.markdown("""
 
 
     /* ======================================================
-       OCULTAR ELEMENTOS INNECESARIOS
+       OCULTAR ELEMENTOS DE STREAMLIT
        ====================================================== */
 
     #MainMenu {
@@ -116,7 +128,7 @@ st.markdown("""
 
 
     /* ======================================================
-       MARCA SIDEBAR
+       MARCA DEL SIDEBAR
        ====================================================== */
 
     .sidebar-brand {
@@ -143,7 +155,7 @@ st.markdown("""
 
 
     /* ======================================================
-       HEADER
+       HERO PRINCIPAL
        ====================================================== */
 
     .hero {
@@ -170,6 +182,7 @@ st.markdown("""
 
     .hero::before {
         content: "";
+
         position: absolute;
 
         width: 260px;
@@ -190,6 +203,7 @@ st.markdown("""
 
     .hero::after {
         content: "";
+
         position: absolute;
 
         width: 180px;
@@ -263,12 +277,14 @@ st.markdown("""
 
 
     /* ======================================================
-       SECCIÓN
+       ENCABEZADOS DE SECCIÓN
        ====================================================== */
 
     .section-header {
         display: flex;
+
         align-items: flex-end;
+
         justify-content: space-between;
 
         margin-bottom: 18px;
@@ -278,6 +294,7 @@ st.markdown("""
         color: var(--text);
 
         font-size: 25px;
+
         font-weight: 750;
 
         letter-spacing: -0.6px;
@@ -310,7 +327,7 @@ st.markdown("""
     }
 
     .stat-card {
-        background: rgba(255,255,255,0.80);
+        background: rgba(255,255,255,0.85);
 
         border: 1px solid var(--border);
 
@@ -346,7 +363,7 @@ st.markdown("""
 
 
     /* ======================================================
-       TARJETAS DE APLICACIONES
+       GRID DEL PORTAFOLIO
        ====================================================== */
 
     .portfolio-grid {
@@ -358,8 +375,14 @@ st.markdown("""
         gap: 24px;
 
         align-items: stretch;
+
+        margin-bottom: 24px;
     }
 
+
+    /* ======================================================
+       TARJETA DE APLICACIÓN
+       ====================================================== */
 
     .portfolio-card {
         display: flex;
@@ -367,6 +390,8 @@ st.markdown("""
         flex-direction: column;
 
         overflow: hidden;
+
+        min-width: 0;
 
         background: var(--surface);
 
@@ -383,18 +408,18 @@ st.markdown("""
             border-color 0.25s ease;
     }
 
-
     .portfolio-card:hover {
         transform: translateY(-5px);
 
         box-shadow: var(--shadow-hover);
 
-        border-color: rgba(37,99,235,0.20);
+        border-color:
+            rgba(37,99,235,0.20);
     }
 
 
     /* ======================================================
-       IMAGEN
+       IMAGEN DE LA TARJETA
        ====================================================== */
 
     .portfolio-image-wrapper {
@@ -426,7 +451,8 @@ st.markdown("""
             transform 0.35s ease;
     }
 
-    .portfolio-card:hover .portfolio-image {
+    .portfolio-card:hover
+    .portfolio-image {
         transform: scale(1.035);
     }
 
@@ -463,7 +489,7 @@ st.markdown("""
 
 
     /* ======================================================
-       CONTENIDO
+       CONTENIDO DE TARJETA
        ====================================================== */
 
     .portfolio-content {
@@ -473,9 +499,12 @@ st.markdown("""
 
         flex: 1;
 
-        padding: 21px 21px 20px 21px;
+        padding:
+            21px
+            21px
+            20px
+            21px;
     }
-
 
     .portfolio-title {
         color: var(--text);
@@ -488,7 +517,6 @@ st.markdown("""
 
         margin-bottom: 9px;
     }
-
 
     .portfolio-description {
         color: #64748b;
@@ -512,20 +540,28 @@ st.markdown("""
 
 
     /* ======================================================
-       BOTÓN
+       FOOTER DE TARJETA
        ====================================================== */
 
     .portfolio-footer {
         margin-top: auto;
     }
 
+
+    /* ======================================================
+       BOTÓN DE APLICACIÓN
+       ====================================================== */
+
     .portfolio-button {
         display: flex;
 
         align-items: center;
+
         justify-content: center;
 
         width: 100%;
+
+        box-sizing: border-box;
 
         padding: 11px 16px;
 
@@ -557,7 +593,8 @@ st.markdown("""
         transform: translateY(-1px);
 
         box-shadow:
-            0 8px 20px rgba(37,99,235,0.25);
+            0 8px 20px
+            rgba(37,99,235,0.25);
     }
 
 
@@ -624,7 +661,8 @@ st.markdown("""
         margin-bottom: 26px;
 
         box-shadow:
-            0 16px 40px rgba(15,23,42,0.14);
+            0 16px 40px
+            rgba(15,23,42,0.14);
     }
 
     .admin-hero-title {
@@ -648,6 +686,10 @@ st.markdown("""
     }
 
 
+    /* ======================================================
+       PANEL ADMINISTRATIVO
+       ====================================================== */
+
     .admin-panel {
         background: white;
 
@@ -659,11 +701,11 @@ st.markdown("""
         padding: 26px;
 
         box-shadow:
-            0 8px 30px rgba(15,23,42,0.05);
+            0 8px 30px
+            rgba(15,23,42,0.05);
 
         margin-bottom: 22px;
     }
-
 
     .admin-panel-title {
         color: var(--text);
@@ -685,7 +727,7 @@ st.markdown("""
 
 
     /* ======================================================
-       FOOTER
+       PIE DE PÁGINA
        ====================================================== */
 
     .footer {
@@ -737,16 +779,43 @@ st.markdown("""
     }
 
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True
+)
 
 
 # ============================================================
-# FUNCIONES
+# FUNCIÓN PARA RENDERIZAR HTML
+# ============================================================
+
+def render_html(contenido):
+    """
+    Renderiza HTML eliminando automáticamente
+    la indentación del código multilínea.
+
+    Esto evita que Streamlit interprete los
+    bloques HTML como código Markdown.
+    """
+
+    contenido_limpio = textwrap.dedent(
+        contenido
+    ).strip()
+
+    st.markdown(
+        contenido_limpio,
+        unsafe_allow_html=True
+    )
+
+
+# ============================================================
+# FUNCIONES DE DATOS
 # ============================================================
 
 def cargar_apps():
 
-    if not os.path.exists(ARCHIVO_APPS):
+    if not os.path.exists(
+        ARCHIVO_APPS
+    ):
         return []
 
     try:
@@ -757,20 +826,29 @@ def cargar_apps():
             encoding="utf-8"
         ) as archivo:
 
-            datos = json.load(archivo)
+            datos = json.load(
+                archivo
+            )
 
-            if isinstance(datos, list):
+            if isinstance(
+                datos,
+                list
+            ):
                 return datos
 
             return []
 
     except Exception:
+
         return []
 
 
 def guardar_apps(apps):
 
-    os.makedirs(CARPETA_DATOS, exist_ok=True)
+    os.makedirs(
+        CARPETA_DATOS,
+        exist_ok=True
+    )
 
     with open(
         ARCHIVO_APPS,
@@ -786,18 +864,25 @@ def guardar_apps(apps):
         )
 
 
+# ============================================================
+# FUNCIONES DE IMÁGENES
+# ============================================================
+
 def guardar_imagen(archivo):
 
     extension = os.path.splitext(
         archivo.name
     )[1].lower()
 
-    if extension not in [
+    extensiones_permitidas = [
         ".png",
         ".jpg",
         ".jpeg",
         ".webp"
-    ]:
+    ]
+
+    if extension not in extensiones_permitidas:
+
         raise ValueError(
             "Formato de imagen no permitido."
         )
@@ -812,7 +897,10 @@ def guardar_imagen(archivo):
         nombre
     )
 
-    with open(ruta, "wb") as f:
+    with open(
+        ruta,
+        "wb"
+    ) as f:
 
         f.write(
             archivo.getbuffer()
@@ -829,13 +917,18 @@ def eliminar_imagen(ruta):
     if os.path.exists(ruta):
 
         try:
+
             os.remove(ruta)
 
         except Exception:
+
             pass
 
 
 def imagen_a_base64(ruta):
+
+    if not ruta:
+        return None
 
     if not os.path.exists(ruta):
         return None
@@ -852,7 +945,9 @@ def imagen_a_base64(ruta):
             ).decode("utf-8")
 
         mime = (
-            mimetypes.guess_type(ruta)[0]
+            mimetypes.guess_type(
+                ruta
+            )[0]
             or "image/jpeg"
         )
 
@@ -862,8 +957,13 @@ def imagen_a_base64(ruta):
         )
 
     except Exception:
+
         return None
 
+
+# ============================================================
+# SEGURIDAD PARA HTML
+# ============================================================
 
 def limpiar(texto):
 
@@ -874,7 +974,7 @@ def limpiar(texto):
 
 
 # ============================================================
-# CARGAR DATOS
+# CARGAR APLICACIONES
 # ============================================================
 
 apps = cargar_apps()
@@ -886,7 +986,7 @@ apps = cargar_apps()
 
 with st.sidebar:
 
-    st.markdown(
+    render_html(
         """
         <div class="sidebar-brand">
 
@@ -897,12 +997,12 @@ with st.sidebar:
             <div class="sidebar-brand-subtitle">
                 Colección de aplicaciones,
                 experimentos y proyectos
-                desarrollados con inteligencia artificial.
+                desarrollados con inteligencia
+                artificial.
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
     st.divider()
@@ -931,7 +1031,7 @@ with st.sidebar:
         len(apps)
     )
 
-    st.markdown(
+    render_html(
         """
         <div style="
             color:#94a3b8;
@@ -939,12 +1039,11 @@ with st.sidebar:
             line-height:1.6;
             margin-top:12px;
         ">
-            Un espacio centralizado para presentar
-            proyectos de IA de forma clara,
-            profesional y visual.
+            Un espacio centralizado para
+            presentar proyectos de IA de
+            forma clara, profesional y visual.
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
     st.divider()
@@ -954,11 +1053,12 @@ with st.sidebar:
         "aplicacionesdeia/inicio"
     )
 
-    st.markdown(
+    render_html(
         f"""
         <a
             href="{url_recursos}"
             target="_blank"
+            rel="noopener noreferrer"
             style="
                 color:#67e8f9;
                 text-decoration:none;
@@ -968,22 +1068,21 @@ with st.sidebar:
         >
             Recursos y ejercicios ↗
         </a>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
 # ============================================================
-# PORTAFOLIO
+# SECCIÓN: PORTAFOLIO
 # ============================================================
 
 if seccion == "Portafolio":
 
-    # --------------------------------------------------------
+    # ========================================================
     # HERO
-    # --------------------------------------------------------
+    # ========================================================
 
-    st.markdown(
+    render_html(
         """
         <div class="hero">
 
@@ -997,68 +1096,79 @@ if seccion == "Portafolio":
             </h1>
 
             <p class="hero-description">
-                Explora una colección de aplicaciones y
-                proyectos desarrollados para experimentar,
-                aprender y resolver problemas mediante
-                tecnologías de inteligencia artificial.
+                Explora una colección de aplicaciones
+                y proyectos desarrollados para
+                experimentar, aprender y resolver
+                problemas mediante tecnologías de
+                inteligencia artificial.
             </p>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # ESTADÍSTICAS
-    # --------------------------------------------------------
+    # ========================================================
 
-    st.markdown(
+    render_html(
         f"""
         <div class="stats-grid">
 
             <div class="stat-card">
+
                 <div class="stat-label">
                     Proyectos
                 </div>
+
                 <div class="stat-value">
                     {len(apps)}
                 </div>
+
             </div>
 
+
             <div class="stat-card">
+
                 <div class="stat-label">
                     Formato
                 </div>
+
                 <div class="stat-value">
                     Web Apps
                 </div>
+
             </div>
 
+
             <div class="stat-card">
+
                 <div class="stat-label">
                     Categoría
                 </div>
+
                 <div class="stat-value">
                     AI / ML
                 </div>
+
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
-    # --------------------------------------------------------
-    # ENCABEZADO DEL CATÁLOGO
-    # --------------------------------------------------------
+    # ========================================================
+    # ENCABEZADO DE PROYECTOS
+    # ========================================================
 
-    st.markdown(
+    render_html(
         """
         <div class="section-header">
 
             <div>
+
                 <div class="section-title">
                     Proyectos
                 </div>
@@ -1066,21 +1176,21 @@ if seccion == "Portafolio":
                 <div class="section-description">
                     Aplicaciones disponibles para explorar.
                 </div>
+
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
-    # --------------------------------------------------------
-    # SIN APLICACIONES
-    # --------------------------------------------------------
+    # ========================================================
+    # PORTAFOLIO VACÍO
+    # ========================================================
 
     if len(apps) == 0:
 
-        st.markdown(
+        render_html(
             """
             <div class="empty-state">
 
@@ -1098,18 +1208,18 @@ if seccion == "Portafolio":
                 </div>
 
             </div>
-            """,
-            unsafe_allow_html=True
+            """
         )
 
 
-    # --------------------------------------------------------
-    # CATÁLOGO
-    # --------------------------------------------------------
+    # ========================================================
+    # MOSTRAR APLICACIONES
+    # ========================================================
 
     else:
 
         tarjetas = []
+
 
         for app in apps:
 
@@ -1139,9 +1249,15 @@ if seccion == "Portafolio":
                 ""
             )
 
+
+            # ------------------------------------------------
+            # IMAGEN
+            # ------------------------------------------------
+
             imagen_base64 = imagen_a_base64(
                 ruta_imagen
             )
+
 
             if imagen_base64:
 
@@ -1157,6 +1273,7 @@ if seccion == "Portafolio":
 
                 imagen_html = """
                     <div style="
+                        width:100%;
                         height:100%;
                         display:flex;
                         align-items:center;
@@ -1169,56 +1286,69 @@ if seccion == "Portafolio":
                 """
 
 
+            # ------------------------------------------------
+            # TARJETA COMPLETA
+            # ------------------------------------------------
+
             tarjeta = f"""
-                <div class="portfolio-card">
+            <div class="portfolio-card">
 
-                    <div class="portfolio-image-wrapper">
+                <div class="portfolio-image-wrapper">
 
-                        {imagen_html}
+                    {imagen_html}
 
-                        <div class="portfolio-badge">
-                            AI PROJECT
-                        </div>
-
+                    <div class="portfolio-badge">
+                        AI PROJECT
                     </div>
 
-                    <div class="portfolio-content">
+                </div>
 
-                        <div class="portfolio-title">
-                            {titulo}
-                        </div>
 
-                        <div class="portfolio-description">
-                            {descripcion}
-                        </div>
+                <div class="portfolio-content">
 
-                        <div class="portfolio-footer">
+                    <div class="portfolio-title">
+                        {titulo}
+                    </div>
 
-                            <a
-                                href="{url}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="portfolio-button"
-                            >
-                                Abrir aplicación
-                                <span style="margin-left:8px;">
-                                    ↗
-                                </span>
-                            </a>
 
-                        </div>
+                    <div class="portfolio-description">
+                        {descripcion}
+                    </div>
+
+
+                    <div class="portfolio-footer">
+
+                        <a
+                            href="{url}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="portfolio-button"
+                        >
+                            Abrir aplicación
+
+                            <span style="
+                                margin-left:8px;
+                            ">
+                                ↗
+                            </span>
+
+                        </a>
 
                     </div>
 
                 </div>
+
+            </div>
             """
 
-            tarjetas.append(tarjeta)
+            tarjetas.append(
+                tarjeta
+            )
 
 
-        # ----------------------------------------------------
-        # GRID
-        # ----------------------------------------------------
+        # ====================================================
+        # CREAR GRID DE 3 TARJETAS
+        # ====================================================
 
         for i in range(
             0,
@@ -1230,46 +1360,50 @@ if seccion == "Portafolio":
                 i:i + 3
             ]
 
-            contenido = (
-                '<div class="portfolio-grid">'
+
+            contenido_grid = (
+                """
+                <div class="portfolio-grid">
+                """
                 +
                 "".join(fila)
                 +
-                '</div>'
-            )
-
-            st.markdown(
-                contenido,
-                unsafe_allow_html=True
+                """
+                </div>
+                """
             )
 
 
-    # --------------------------------------------------------
+            render_html(
+                contenido_grid
+            )
+
+
+    # ========================================================
     # FOOTER
-    # --------------------------------------------------------
+    # ========================================================
 
-    st.markdown(
+    render_html(
         """
         <div class="footer">
-            AI Portfolio · Aplicaciones y proyectos
-            de Inteligencia Artificial
+            AI Portfolio · Aplicaciones y
+            proyectos de Inteligencia Artificial
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
 # ============================================================
-# ADMINISTRACIÓN
+# SECCIÓN: ADMINISTRACIÓN
 # ============================================================
 
 else:
 
-    # --------------------------------------------------------
-    # HERO ADMIN
-    # --------------------------------------------------------
+    # ========================================================
+    # HERO ADMINISTRACIÓN
+    # ========================================================
 
-    st.markdown(
+    render_html(
         """
         <div class="admin-hero">
 
@@ -1285,16 +1419,15 @@ else:
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
 
     # ========================================================
-    # AGREGAR APLICACIÓN
+    # PANEL NUEVA APLICACIÓN
     # ========================================================
 
-    st.markdown(
+    render_html(
         """
         <div class="admin-panel">
 
@@ -1308,10 +1441,13 @@ else:
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
+
+    # ========================================================
+    # FORMULARIO
+    # ========================================================
 
     with st.form(
         "formulario_nueva_app",
@@ -1322,11 +1458,18 @@ else:
             [1.4, 1]
         )
 
+
+        # ----------------------------------------------------
+        # INFORMACIÓN
+        # ----------------------------------------------------
+
         with col1:
 
             titulo = st.text_input(
                 "Nombre de la aplicación",
-                placeholder="Ej. Simulador de datos IoT"
+                placeholder=(
+                    "Ej. Simulador de datos IoT"
+                )
             )
 
             descripcion = st.text_area(
@@ -1345,6 +1488,11 @@ else:
                 )
             )
 
+
+        # ----------------------------------------------------
+        # IMAGEN
+        # ----------------------------------------------------
+
         with col2:
 
             imagen = st.file_uploader(
@@ -1361,7 +1509,8 @@ else:
                 )
             )
 
-            st.markdown(
+
+            render_html(
                 """
                 <div style="
                     background:#f8fafc;
@@ -1373,19 +1522,31 @@ else:
                     font-size:12px;
                     line-height:1.6;
                 ">
-                    <strong style="color:#334155;">
+
+                    <strong style="
+                        color:#334155;
+                    ">
                         Recomendación
                     </strong>
+
                     <br>
-                    Utiliza capturas limpias de tu aplicación
-                    o una portada diseñada específicamente
-                    para representar el proyecto.
+
+                    Utiliza capturas limpias de tu
+                    aplicación o una portada diseñada
+                    específicamente para representar
+                    el proyecto.
+
                 </div>
-                """,
-                unsafe_allow_html=True
+                """
             )
 
+
         st.write("")
+
+
+        # ----------------------------------------------------
+        # BOTÓN PUBLICAR
+        # ----------------------------------------------------
 
         agregar = st.form_submit_button(
             "Publicar aplicación",
@@ -1402,10 +1563,21 @@ else:
 
         errores = []
 
+
+        # ----------------------------------------------------
+        # LIMPIAR DATOS
+        # ----------------------------------------------------
+
         titulo = titulo.strip()
+
         descripcion = descripcion.strip()
+
         url = url.strip()
 
+
+        # ----------------------------------------------------
+        # VALIDAR TÍTULO
+        # ----------------------------------------------------
 
         if not titulo:
 
@@ -1414,6 +1586,10 @@ else:
             )
 
 
+        # ----------------------------------------------------
+        # VALIDAR DESCRIPCIÓN
+        # ----------------------------------------------------
+
         if not descripcion:
 
             errores.append(
@@ -1421,12 +1597,31 @@ else:
             )
 
 
+        # ----------------------------------------------------
+        # VALIDAR URL
+        # ----------------------------------------------------
+
         if not url:
 
             errores.append(
                 "Debes escribir la URL."
             )
 
+        elif not (
+            url.startswith("http://")
+            or
+            url.startswith("https://")
+        ):
+
+            errores.append(
+                "La URL debe comenzar con "
+                "http:// o https://."
+            )
+
+
+        # ----------------------------------------------------
+        # VALIDAR IMAGEN
+        # ----------------------------------------------------
 
         if not imagen:
 
@@ -1435,16 +1630,9 @@ else:
             )
 
 
-        if url and not (
-            url.startswith("http://")
-            or
-            url.startswith("https://")
-        ):
-
-            errores.append(
-                "La URL debe comenzar con http:// o https://."
-            )
-
+        # ====================================================
+        # MOSTRAR ERRORES
+        # ====================================================
 
         if errores:
 
@@ -1455,6 +1643,10 @@ else:
                 )
 
 
+        # ====================================================
+        # GUARDAR APLICACIÓN
+        # ====================================================
+
         else:
 
             try:
@@ -1462,6 +1654,7 @@ else:
                 ruta_imagen = guardar_imagen(
                     imagen
                 )
+
 
                 nueva_app = {
 
@@ -1479,39 +1672,50 @@ else:
 
                     "imagen":
                         ruta_imagen
+
                 }
+
 
                 apps.append(
                     nueva_app
                 )
 
+
                 guardar_apps(
                     apps
                 )
+
 
                 st.success(
                     "Aplicación publicada correctamente."
                 )
 
+
                 st.rerun()
+
 
             except Exception as e:
 
                 st.error(
-                    f"No fue posible guardar la aplicación: {e}"
+                    "No fue posible guardar "
+                    f"la aplicación: {e}"
                 )
 
 
     # ========================================================
-    # APLICACIONES EXISTENTES
+    # APLICACIONES PUBLICADAS
     # ========================================================
 
-    st.markdown(
-        "<br>",
-        unsafe_allow_html=True
+    render_html(
+        """
+        <div style="
+            height:20px;
+        "></div>
+        """
     )
 
-    st.markdown(
+
+    render_html(
         """
         <div class="admin-panel">
 
@@ -1525,16 +1729,24 @@ else:
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
 
+
+    # ========================================================
+    # SIN APLICACIONES
+    # ========================================================
 
     if len(apps) == 0:
 
         st.info(
             "No hay aplicaciones publicadas todavía."
         )
+
+
+    # ========================================================
+    # LISTA DE APLICACIONES
+    # ========================================================
 
     else:
 
@@ -1544,19 +1756,27 @@ else:
                 [1, 5, 1]
             )
 
+
+            # ------------------------------------------------
+            # PREVISUALIZACIÓN
+            # ------------------------------------------------
+
             with col1:
 
+                ruta_imagen = app.get(
+                    "imagen",
+                    ""
+                )
+
+
                 if os.path.exists(
-                    app.get(
-                        "imagen",
-                        ""
-                    )
+                    ruta_imagen
                 ):
 
                     try:
 
                         imagen_preview = Image.open(
-                            app["imagen"]
+                            ruta_imagen
                         )
 
                         st.image(
@@ -1573,9 +1793,28 @@ else:
                     st.write("—")
 
 
+            # ------------------------------------------------
+            # INFORMACIÓN
+            # ------------------------------------------------
+
             with col2:
 
-                st.markdown(
+                titulo_admin = limpiar(
+                    app.get(
+                        "titulo",
+                        ""
+                    )
+                )
+
+                url_admin = limpiar(
+                    app.get(
+                        "url",
+                        ""
+                    )
+                )
+
+
+                render_html(
                     f"""
                     <div style="
                         padding-top:5px;
@@ -1586,22 +1825,26 @@ else:
                             color:#0f172a;
                             font-size:15px;
                         ">
-                            {limpiar(app.get("titulo", ""))}
+                            {titulo_admin}
                         </div>
 
                         <div style="
                             color:#64748b;
                             font-size:12px;
                             margin-top:4px;
+                            word-break:break-all;
                         ">
-                            {limpiar(app.get("url", ""))}
+                            {url_admin}
                         </div>
 
                     </div>
-                    """,
-                    unsafe_allow_html=True
+                    """
                 )
 
+
+            # ------------------------------------------------
+            # ELIMINAR
+            # ------------------------------------------------
 
             with col3:
 
@@ -1610,6 +1853,7 @@ else:
                     key=f"eliminar_{app['id']}",
                     type="secondary"
                 )
+
 
                 if eliminar:
 
@@ -1620,32 +1864,38 @@ else:
                         )
                     )
 
+
                     apps = [
                         item
+
                         for item in apps
-                        if item["id"] != app["id"]
+
+                        if item["id"]
+                        != app["id"]
                     ]
+
 
                     guardar_apps(
                         apps
                     )
 
+
                     st.success(
                         "Aplicación eliminada."
                     )
 
+
                     st.rerun()
 
 
-    # --------------------------------------------------------
-    # FOOTER ADMIN
-    # --------------------------------------------------------
+    # ========================================================
+    # FOOTER ADMINISTRACIÓN
+    # ========================================================
 
-    st.markdown(
+    render_html(
         """
         <div class="footer">
             Panel de administración · AI Portfolio
         </div>
-        """,
-        unsafe_allow_html=True
+        """
     )
