@@ -4,8 +4,14 @@ import json
 import os
 import uuid
 import base64
+import io
 import mimetypes
 import html
+
+from almacenamiento import (
+    ErrorAlmacenamiento,
+    obtener_almacenamiento
+)
 
 
 # ============================================================
@@ -24,22 +30,12 @@ st.set_page_config(
 # CONFIGURACIÓN DE ARCHIVOS
 # ============================================================
 
-CARPETA_DATOS = "datos_apps"
+# Rutas dentro del almacenamiento (rama de GitHub o disco local).
+# Ver almacenamiento.py.
 
-CARPETA_IMAGENES = os.path.join(
-    CARPETA_DATOS,
-    "imagenes"
-)
+ARCHIVO_APPS = "apps.json"
 
-ARCHIVO_APPS = os.path.join(
-    CARPETA_DATOS,
-    "apps.json"
-)
-
-os.makedirs(
-    CARPETA_IMAGENES,
-    exist_ok=True
-)
+CARPETA_IMAGENES = "imagenes"
 
 
 # ============================================================
@@ -892,57 +888,55 @@ def mostrar_html(contenido):
 # FUNCIONES DE DATOS
 # ============================================================
 
-def cargar_apps():
+def cargar_apps(almacenamiento):
 
-    if not os.path.exists(ARCHIVO_APPS):
+    contenido = almacenamiento.leer(
+        ARCHIVO_APPS
+    )
+
+    if contenido is None:
         return []
 
     try:
 
-        with open(
-            ARCHIVO_APPS,
-            "r",
-            encoding="utf-8"
-        ) as archivo:
-
-            datos = json.load(archivo)
-
-        if isinstance(datos, list):
-            return datos
-
-        return []
-
-    except Exception:
-
-        return []
-
-
-def guardar_apps(apps):
-
-    os.makedirs(
-        CARPETA_DATOS,
-        exist_ok=True
-    )
-
-    with open(
-        ARCHIVO_APPS,
-        "w",
-        encoding="utf-8"
-    ) as archivo:
-
-        json.dump(
-            apps,
-            archivo,
-            ensure_ascii=False,
-            indent=4
+        datos = json.loads(
+            contenido.decode("utf-8")
         )
+
+    except ValueError:
+
+        st.error(
+            "El archivo de aplicaciones está dañado."
+        )
+
+        return []
+
+    if isinstance(datos, list):
+        return datos
+
+    return []
+
+
+def guardar_apps(almacenamiento, apps, mensaje):
+
+    contenido = json.dumps(
+        apps,
+        ensure_ascii=False,
+        indent=4
+    ).encode("utf-8")
+
+    almacenamiento.escribir(
+        ARCHIVO_APPS,
+        contenido,
+        mensaje
+    )
 
 
 # ============================================================
 # FUNCIONES DE IMAGEN
 # ============================================================
 
-def guardar_imagen(archivo):
+def guardar_imagen(almacenamiento, archivo):
 
     extension = os.path.splitext(
         archivo.name
@@ -961,74 +955,67 @@ def guardar_imagen(archivo):
             "Formato de imagen no permitido."
         )
 
-    nombre = (
+    ruta = (
+        f"{CARPETA_IMAGENES}/"
         f"{uuid.uuid4().hex}"
         f"{extension}"
     )
 
-    ruta = os.path.join(
-        CARPETA_IMAGENES,
-        nombre
-    )
-
-    with open(
+    almacenamiento.escribir(
         ruta,
-        "wb"
-    ) as f:
-
-        f.write(
-            archivo.getbuffer()
-        )
+        archivo.getvalue(),
+        f"Subir imagen {ruta}"
+    )
 
     return ruta
 
 
-def eliminar_imagen(ruta):
+def eliminar_imagen(almacenamiento, ruta):
 
     if not ruta:
         return
 
-    if os.path.exists(ruta):
-
-        try:
-            os.remove(ruta)
-
-        except Exception:
-            pass
+    almacenamiento.eliminar(
+        ruta,
+        f"Eliminar imagen {ruta}"
+    )
 
 
-def imagen_base64(ruta):
+def leer_imagen(almacenamiento, ruta):
 
     if not ruta:
         return None
 
-    if not os.path.exists(ruta):
-        return None
-
     try:
+        return almacenamiento.leer(ruta)
 
-        with open(
-            ruta,
-            "rb"
-        ) as archivo:
-
-            contenido = base64.b64encode(
-                archivo.read()
-            ).decode("utf-8")
-
-        mime = (
-            mimetypes.guess_type(ruta)[0]
-            or "image/jpeg"
-        )
-
-        return (
-            f"data:{mime};base64,"
-            f"{contenido}"
-        )
-
-    except Exception:
-
+    except ErrorAlmacenamiento:
         return None
+
+
+def imagen_base64(almacenamiento, ruta):
+
+    contenido = leer_imagen(
+        almacenamiento,
+        ruta
+    )
+
+    if not contenido:
+        return None
+
+    mime = (
+        mimetypes.guess_type(ruta)[0]
+        or "image/jpeg"
+    )
+
+    datos = base64.b64encode(
+        contenido
+    ).decode("utf-8")
+
+    return (
+        f"data:{mime};base64,"
+        f"{datos}"
+    )
 
 
 # ============================================================
@@ -1047,7 +1034,20 @@ def escapar(valor):
 # CARGAR DATOS
 # ============================================================
 
-apps = cargar_apps()
+try:
+
+    almacenamiento = obtener_almacenamiento()
+
+    apps = cargar_apps(almacenamiento)
+
+except ErrorAlmacenamiento as e:
+
+    st.error(
+        f"No fue posible conectar con el "
+        f"almacenamiento de datos: {e}"
+    )
+
+    st.stop()
 
 
 # ============================================================
@@ -1318,7 +1318,10 @@ if seccion == "Portafolio":
                 ""
             )
 
-            img = imagen_base64(ruta)
+            img = imagen_base64(
+                almacenamiento,
+                ruta
+            )
 
 
             if img:
@@ -1458,6 +1461,16 @@ else:
         </section>
         """
     )
+
+
+    if not almacenamiento.es_persistente:
+
+        st.warning(
+            "Los datos se están guardando en el disco local. "
+            "En Streamlit Cloud ese disco se borra al reiniciar "
+            "la app. Configura la sección [github] en los "
+            "secrets para que los datos sean permanentes."
+        )
 
 
     # --------------------------------------------------------
@@ -1620,6 +1633,7 @@ else:
             try:
 
                 ruta = guardar_imagen(
+                    almacenamiento,
                     imagen
                 )
 
@@ -1648,7 +1662,9 @@ else:
                 )
 
                 guardar_apps(
-                    apps
+                    almacenamiento,
+                    apps,
+                    f"Publicar aplicación: {titulo}"
                 )
 
 
@@ -1721,12 +1737,17 @@ else:
                     ""
                 )
 
-                if os.path.exists(ruta):
+                contenido = leer_imagen(
+                    almacenamiento,
+                    ruta
+                )
+
+                if contenido:
 
                     try:
 
                         preview = Image.open(
-                            ruta
+                            io.BytesIO(contenido)
                         )
 
                         st.image(
@@ -1775,14 +1796,6 @@ else:
 
                 if eliminar:
 
-                    eliminar_imagen(
-                        app.get(
-                            "imagen",
-                            ""
-                        )
-                    )
-
-
                     apps = [
                         item
 
@@ -1792,17 +1805,33 @@ else:
                         != app.get("id")
                     ]
 
+                    try:
 
-                    guardar_apps(
-                        apps
-                    )
+                        guardar_apps(
+                            almacenamiento,
+                            apps,
+                            f"Eliminar aplicación: "
+                            f"{app.get('titulo', '')}"
+                        )
 
+                        eliminar_imagen(
+                            almacenamiento,
+                            app.get(
+                                "imagen",
+                                ""
+                            )
+                        )
 
-                    st.success(
-                        "Aplicación eliminada."
-                    )
+                    except ErrorAlmacenamiento as e:
 
-                    st.rerun()
+                        st.error(
+                            f"No fue posible eliminar "
+                            f"la aplicación: {e}"
+                        )
+
+                    else:
+
+                        st.rerun()
 
 
     # --------------------------------------------------------
