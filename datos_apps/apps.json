@@ -5,5 +5,12 @@
         "descripcion": "Esta herramienta educativa intuitiva te permite visualizar y entender la composición de datos de series de tiempo (tendencia, estacionalidad y ruido) manipulando directamente los parámetros de un sensor simulado.",
         "url": "https://tiempo-serie-intex4dfrrmdlsflttn2mi.streamlit.app",
         "imagen": "imagenes/f6ba6ecd51ed45a6bf3b165cff62beaa.png"
+    },
+    {
+        "id": "695c586583eb4e5f85f7dc4d9e5952e6",
+        "titulo": "Laboratorio Interactivo de Calidad de Datos IoT",
+        "descripcion": "Configura e inyecta anomalías interactivamente para el aprendizaje de Machine Learning. Esta herramienta te permite explorar cómo la falta de datos y los valores atípicos (outliers) afectan la estructura de tus datasets sintéticos de sensores IoT, preparándote para construir mejores modelos.",
+        "url": "https://sensores-iot-sint-ticos-8maflo7cdtcmf9ufgytdbr.streamlit.app",
+        "imagen": "imagenes/05d06c62878e4840b74595d40daed83c.png"
     }
 ]
