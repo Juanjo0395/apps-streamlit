@@ -54,5 +54,12 @@
         "descripcion": "Herramienta educativa diseñada para visualizar y comprender en tiempo real el comportamiento del algoritmo de descenso de gradiente en la optimización de funciones. Permite ajustar hiperparámetros clave —como la tasa de aprendizaje ($\\eta$), el punto de partida y el número de iteraciones— para observar la trayectoria del algoritmo sobre una superficie 3D de costo y analizar en un gráfico 2D la rapidez con la que el error converge hacia el mínimo global.",
         "url": "https://gradiente-nbtt3fujiwvv24xuxepcrv.streamlit.app",
         "imagen": "imagenes/b23aa9ba98c24199a340ff00ac7303d1.png"
+    },
+    {
+        "id": "ddc0d872d9d1406ab76048a7c7cf80c4",
+        "titulo": "Clasificador Interactivo de Frutas por Distancia Vectorial",
+        "descripcion": "Aplicación interactiva diseñada para ilustrar los principios de similitud matemática y clasificación por distancia vectorial en aprendizaje automático. Permite al usuario ingresar las características físicas de una fruta —como peso, diámetro y dulzor— para construir un vector de datos y calcular en tiempo real la distancia hacia distintas categorías de referencia (manzana, banano, naranja y sandía), determinando cuál es la más parecida.",
+        "url": "https://juanjo0395-frutas-frutas-app-ck2oyl.streamlit.app",
+        "imagen": "imagenes/9b60a517fbb143b8a9d95336693fe2b2.png"
     }
 ]
