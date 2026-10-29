@@ -26,5 +26,12 @@
         "descripcion": "Sistema de análisis que se conecta a una base de datos InfluxDB para consultar lecturas reales de sensores IoT de temperatura y humedad, entrenando un modelo de regresión lineal que calcula la sensación térmica.",
         "url": "https://predicci-n-t-rmica-6tudnafsg6sdkudmju6nw4.streamlit.app",
         "imagen": "imagenes/36d9bd5fbfcc429fade5dfc026b5c149.png"
+    },
+    {
+        "id": "6e23f843454d47e29e6b94ec295f79f1",
+        "titulo": "Laboratorio Interactivo de Eficiencia y Paralelismo en Python",
+        "descripcion": "Esta aplicación interactiva permite experimentar y comparar distintas estrategias para acelerar la ejecución de programas en Python, abarcando el uso de hilos (multithreading), procesos independientes (multiprocessing) y vectorización con NumPy. A través de analogías didácticas (como la gestión de un supermercado) y mediciones de tiempo en tiempo real, ayuda a comprender el impacto de la Ley de Amdahl en el rendimiento computacional.",
+        "url": "https://paralelismo-86dqekxvuq4lvfnrccrdx3.streamlit.app",
+        "imagen": "imagenes/5cfa0115873c4ee1b014100d72e7ea91.png"
     }
 ]
