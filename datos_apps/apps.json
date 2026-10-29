@@ -33,5 +33,12 @@
         "descripcion": "Esta aplicación interactiva permite experimentar y comparar distintas estrategias para acelerar la ejecución de programas en Python, abarcando el uso de hilos (multithreading), procesos independientes (multiprocessing) y vectorización con NumPy. A través de analogías didácticas (como la gestión de un supermercado) y mediciones de tiempo en tiempo real, ayuda a comprender el impacto de la Ley de Amdahl en el rendimiento computacional.",
         "url": "https://paralelismo-86dqekxvuq4lvfnrccrdx3.streamlit.app",
         "imagen": "imagenes/5cfa0115873c4ee1b014100d72e7ea91.png"
+    },
+    {
+        "id": "728f1828d4b945a1859091febf7f37c6",
+        "titulo": "Análisis y Visualización de la Fertilidad del Suelo con Aprendizaje Automático",
+        "descripcion": "Esta imagen ilustra una aplicación interactiva que utiliza los datos abiertos de AGROSAVIA para analizar y diagnosticar la fertilidad del suelo (baja, media, alta). Muestra cómo los algoritmos avanzados, como el de los K Vecinos Más Cercanos (KNN), pueden procesar grandes volúmenes de información—como 5,000 registros y 15 variables—para ofrecer clasificaciones claras que facilitan la toma de decisiones agrícolas directamente en el campo.",
+        "url": "https://knn-suelo-equjdbsy6tcsyfqhieuezi.streamlit.app",
+        "imagen": "imagenes/14706d97b7494b5ab66f466ba2d5b777.png"
     }
 ]
