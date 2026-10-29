@@ -1,0 +1,9 @@
+[
+    {
+        "id": "4c0af26c14fc4e4ea1e9f8b6d576b07b",
+        "titulo": "Simulador Interactivo de Datos de Sensores IoT",
+        "descripcion": "Esta herramienta educativa intuitiva te permite visualizar y entender la composición de datos de series de tiempo (tendencia, estacionalidad y ruido) manipulando directamente los parámetros de un sensor simulado.",
+        "url": "https://tiempo-serie-intex4dfrrmdlsflttn2mi.streamlit.app",
+        "imagen": "imagenes/f6ba6ecd51ed45a6bf3b165cff62beaa.png"
+    }
+]
