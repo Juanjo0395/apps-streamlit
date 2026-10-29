@@ -47,5 +47,12 @@
         "descripcion": "Esta aplicación interactiva está diseñada para enseñar y explorar visualmente cómo funcionan los modelos de regresión lineal para predecir valores numéricos continuos a partir de datos históricos, utilizando como caso práctico el dataset real del valor de las viviendas en California.",
         "url": "https://gradiente-paso-a-paso-cbsnsttojs6lr5djbfrizz.streamlit.app",
         "imagen": "imagenes/776e143732004a419d18ed365451ca52.png"
+    },
+    {
+        "id": "91c9cc2a115c409db6c5a4d0bdaf343e",
+        "titulo": "Panel de Control Interactivo para la Visualización del Descenso de Gradiente",
+        "descripcion": "Herramienta educativa diseñada para visualizar y comprender en tiempo real el comportamiento del algoritmo de descenso de gradiente en la optimización de funciones. Permite ajustar hiperparámetros clave —como la tasa de aprendizaje ($\\eta$), el punto de partida y el número de iteraciones— para observar la trayectoria del algoritmo sobre una superficie 3D de costo y analizar en un gráfico 2D la rapidez con la que el error converge hacia el mínimo global.",
+        "url": "https://gradiente-nbtt3fujiwvv24xuxepcrv.streamlit.app",
+        "imagen": "imagenes/b23aa9ba98c24199a340ff00ac7303d1.png"
     }
 ]
