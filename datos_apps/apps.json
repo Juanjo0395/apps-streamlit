@@ -70,13 +70,6 @@
         "imagen": "imagenes/a9a1b9506387430a9d43341d5aef2d46.png"
     },
     {
-        "id": "c2734f402bee458fb71752a57b01d937",
-        "titulo": "Detector de Anomalías: Lógica, Complejidad Big-O y NumPyHerramienta interactiva diseñada para explorar la aplicación de reglas lógicas y complejidad computacional en la detección de anomalías en datos de sensores. Permite ajustar parámetros como número de lecturas y umbrales de humedad o temperatura para clasificar eventos en tiempo real, mientras ofrece módulos para analizar la notación Big-O y comparar el rendimiento (benchmark) entre implementaciones ingenuas y evaluadas de forma vectorizada con NumPy.",
-        "descripcion": "Herramienta interactiva diseñada para explorar la aplicación de reglas lógicas y complejidad computacional en la detección de anomalías en datos de sensores. Permite ajustar parámetros como número de lecturas y umbrales de humedad o temperatura para clasificar eventos en tiempo real, mientras ofrece módulos para analizar la notación Big-O y comparar el rendimiento (benchmark) entre implementaciones ingenuas y evaluadas de forma vectorizada con NumPy.",
-        "url": "https://xanft3mvynx2a7af7rrqps.streamlit.app",
-        "imagen": "imagenes/15a5653275bf48dbb83913e8a7bdf899.png"
-    },
-    {
         "id": "84c28e39668e4bbb8e1861ee64994e53",
         "titulo": "Monitoreo de Nivel — Quebrada Yarumal (CORNARE)",
         "descripcion": "Panel interactivo de consulta para el seguimiento y análisis de datos hídricos en la estación de monitoreo de la Quebrada Yarumal (Rionegro, Antioquia). Permite seleccionar rangos de fechas, filtrar por niveles de calidad de los datos y ajustar parámetros de análisis sobre la información hidroclimática provista por CORNARE.",
