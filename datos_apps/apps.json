@@ -61,5 +61,12 @@
         "descripcion": "Aplicación interactiva diseñada para ilustrar los principios de similitud matemática y clasificación por distancia vectorial en aprendizaje automático. Permite al usuario ingresar las características físicas de una fruta —como peso, diámetro y dulzor— para construir un vector de datos y calcular en tiempo real la distancia hacia distintas categorías de referencia (manzana, banano, naranja y sandía), determinando cuál es la más parecida.",
         "url": "https://juanjo0395-frutas-frutas-app-ck2oyl.streamlit.app",
         "imagen": "imagenes/9b60a517fbb143b8a9d95336693fe2b2.png"
+    },
+    {
+        "id": "e7efd88c24134020ae656c9ef477138c",
+        "titulo": "Predictor de Calidad del Aire — CORNARE (MARCO)",
+        "descripcion": "Herramienta interactiva diseñada para el pronóstico de la calidad del aire mediante el despliegue de modelos de aprendizaje automático. Permite cargar archivos de modelos entrenados (.pkl) para generar predicciones a futuro sobre la concentración de material particulado (PM2.5 y PM10) a partir de los mejores modelos evaluados por RMSE.",
+        "url": "https://calidad-del-aire-uvrr99sqedfwwop3ycuas8.streamlit.app",
+        "imagen": "imagenes/a9a1b9506387430a9d43341d5aef2d46.png"
     }
 ]
