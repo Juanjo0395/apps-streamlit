@@ -12,5 +12,12 @@
         "descripcion": "Configura e inyecta anomalías interactivamente para el aprendizaje de Machine Learning. Esta herramienta te permite explorar cómo la falta de datos y los valores atípicos (outliers) afectan la estructura de tus datasets sintéticos de sensores IoT, preparándote para construir mejores modelos.",
         "url": "https://sensores-iot-sint-ticos-8maflo7cdtcmf9ufgytdbr.streamlit.app",
         "imagen": "imagenes/05d06c62878e4840b74595d40daed83c.png"
+    },
+    {
+        "id": "dade9b68fab144db9c9f1309507729c1",
+        "titulo": "Predictor Climático con Regresión Logística",
+        "descripcion": "Aplicación interactiva que predice la probabilidad de lluvia según variables como temperatura, humedad y viento, permitiendo ajustar el umbral de clasificación sobre una curva sigmoide.",
+        "url": "https://regresion-logistica-dakrfaetexbfhsfrrnwr2a.streamlit.app",
+        "imagen": "imagenes/3f0c49d8251c404bba3b9d4673b6802b.png"
     }
 ]
