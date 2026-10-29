@@ -19,5 +19,12 @@
         "descripcion": "Aplicación interactiva que predice la probabilidad de lluvia según variables como temperatura, humedad y viento, permitiendo ajustar el umbral de clasificación sobre una curva sigmoide.",
         "url": "https://regresion-logistica-dakrfaetexbfhsfrrnwr2a.streamlit.app",
         "imagen": "imagenes/3f0c49d8251c404bba3b9d4673b6802b.png"
+    },
+    {
+        "id": "f74752499c0a4ed1a98a9a6ac414632d",
+        "titulo": "Predictor de Sensación Térmica con InfluxDB",
+        "descripcion": "Sistema de análisis que se conecta a una base de datos InfluxDB para consultar lecturas reales de sensores IoT de temperatura y humedad, entrenando un modelo de regresión lineal que calcula la sensación térmica.",
+        "url": "https://predicci-n-t-rmica-6tudnafsg6sdkudmju6nw4.streamlit.app",
+        "imagen": "imagenes/36d9bd5fbfcc429fade5dfc026b5c149.png"
     }
 ]
